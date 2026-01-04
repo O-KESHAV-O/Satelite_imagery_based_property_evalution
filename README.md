@@ -192,10 +192,6 @@ Grad-CAM was applied to the image branch of the multimodal model to visualize re
 ---
 ---
 ---
----
----
----
----
 
 ---
 
