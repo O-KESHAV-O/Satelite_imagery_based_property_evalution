@@ -16,21 +16,14 @@ The system also includes extensive exploratory data analysis, multiple tabular-o
 
 ---
 
-##  Project Highlights
-
-- Extensive EDA and feature engineering  
-- Evaluation of classical and ensemble ML models  
-- Multimodal deep learning using satellite images  
-- Explainability through Grad-CAM visualizations  
-- Reproducible inference pipeline  
-
----
-
 ##  Project Structure
 
 ```
 project_1/
-│
+|
+├── data - images - raw ├── train   # After image-fetch
+|                       ├── test
+|
 ├── installations.ipynb      # Environment setup
 ├── image_fetch.ipynb        # Satellite image acquisition
 ├── Preprocessing.ipynb      # EDA & feature engineering
@@ -42,8 +35,24 @@ project_1/
 ├── ml_data.pkl              # Saved scaler & preprocessing artifacts
 ├── submission.csv           # Final predictions
 ```
-
 ---
+INSTALL DEPENDENCIES
+
+It is recommended to use a virtual environment.
+
+Command:
+pip install -r requirements.txt
+---
+##  Mapbox Setup
+This project downloads satellite images using the **Mapbox Static Images API**.
+
+### Steps
+
+1. Create a Mapbox account: https://www.mapbox.com/
+2. Generate an access token
+3. Inside Image_fetch.inpyb first line
+-- os.environ["MAPBOX_TOKEN"] = "paste token here"
+
 
 ## Handling Absolute Paths in the Project
 
@@ -95,17 +104,6 @@ TEST_CSV = "./project_1/test_with_images.csv"
 
 ---
 
-## Exploratory Data Analysis (EDA)
-
-Key steps performed during EDA include:
-
-- Conversion of sale date into property age  
-- Correlation analysis and removal of redundant features  
-- Renovation feature engineering using a binary indicator  
-- Outlier detection and clipping of extreme values  
-- Log and power transformations to reduce skewness  
-- Standard scaling fitted only on training data  
-
 All preprocessing artifacts were saved using `joblib` for reproducibility.
 
 ---
@@ -116,65 +114,6 @@ For each property, latitude and longitude coordinates were used to fetch satelli
 
 ---
 
-##  Modeling Approaches
-
-### Tabular-Only Models
-
-The following models were trained using structured features only:
-- Linear Regression
-- K-Nearest Neighbors
-- Decision Tree
-- Random Forest
-- XGBoost
-- LightGBM
-
-LightGBM achieved the best performance among tabular-only models with a test R² of approximately **0.90**.
-
----
-
-### Multimodal Deep Learning Model
-
-The multimodal architecture consists of:
-- EfficientNetB0 for satellite image feature extraction  
-- A multilayer perceptron for tabular features  
-- Feature fusion via concatenation  
-- Dense layers for regression  
-
-**Performance:**
-- Log RMSE ≈ 0.206  
-- Log R² ≈ 0.85  
-
-Although slightly lower than the best tabular-only models, the multimodal approach incorporates valuable visual context and enables interpretability.
-
----
-
-##  Model Explainability (Grad-CAM)
-
-Grad-CAM was applied to the image branch of the multimodal model to visualize regions of satellite images that most influenced price predictions. This analysis shows that the model focuses on semantically meaningful areas such as buildings, greenery, and neighborhood structure.
-
----
-
-##  Results Summary
-
-| Approach        | Best R² | Key Strength |
-|----------------|--------|--------------|
-| Tabular Models | ~0.90  | Highest numerical accuracy |
-| Multimodal     | ~0.85  | Visual context & explainability |
-
----
-
-##  Tech Stack
-
-- Python  
-- Pandas, NumPy  
-- Scikit-learn  
-- XGBoost, LightGBM  
-- TensorFlow / Keras  
-- OpenCV  
-- Matplotlib, Seaborn  
-- Joblib  
-
----
 
 ##  How to Run
 
@@ -184,18 +123,40 @@ Grad-CAM was applied to the image branch of the multimodal model to visualize re
    ```
 2. Run notebooks in order:
    - installations.ipynb
+      ```
+      for installing all the needed Libraries
+      ```
    - Preprocessing.ipynb
+       ```
+       use absolute path here also in initial block for reading the csv data , for train and test
+       df = pd.read_csv(r"C:\Users\ASUS\Documents\data_for_cdc\train(1)(train(1)).csv")
+       df_t=pd.read_csv(r"C:\Users\ASUS\Documents\data_for_cdc\test2(test(1)).csv")
+       ```
    - Modeling.ipynb
    - image_fetch.ipynb
+     #### This step:
+
+       -  Downloads 224×224 satellite images using Mapbox
+
+       - Saves images to:      
+        ```
+        data/images/raw/train
+        ```
+        \
+        ```    
+        data/images/raw/test
+        ```
+
+       - Generates:     
+        ```
+        train_with_images.csv
+        ```
+        \
+        ```
+        test_with_images.csv
+        ```
    - multimodel.ipynb
-3. Predictions are saved as `submission.csv`
+3. Predictions are saved as `submission.csv` inside project_1 folder
 ---
 ---
 ---
-
----
-
-## 👤 Author
-
-**Keshav Yadav**  
-Multimodal Machine Learning | Data Science | Computer Vision
